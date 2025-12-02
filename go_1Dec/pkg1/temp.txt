@@ -1,0 +1,5 @@
+There are three things to note. First, we create our buffer once and reuse it on every
+call to r.Read. This allows us to use a single memory allocation to read from a poten‐
+tially large data source. If the Read method were written to return a []byte, it would
+require a new allocation on every single call. Each allocation would end up on the
+heap, which would make quite a lot of work for the garbage collector.
