@@ -24,7 +24,5 @@ func main() {
 	r := mux.NewRouter()
 	Routes(r)
 	fmt.Println("Server starting on port 8080")
-	http.ListenAndServe(":8080", r)
-
-	
+	http.ListenAndServe(":8080", r)	
 }

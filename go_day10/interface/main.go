@@ -1,58 +1,79 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
-
-type I interface{
-	M()
-}
-
-type T struct{
-	S string
-}
-
-type F float64
-
-func (t *T) M(){
-	if(t == nil){
-		fmt.Println("nil")
-		return
+func main() {
+	// Try changing the JSON below to practice
+	jsonSamples := []string{
+		`{"name": "Mayank", "age": 26, "active": true}`,
+		`["go", "python", 123, false]`,
+		`"hello world"`,
+		`12345`,
+		`true`,
 	}
-	fmt.Println(t.S)
+
+	for _, sample := range jsonSamples {
+		fmt.Println("\n--- Parsing JSON ---")
+		fmt.Println(sample)
+		
+		
+		var any interface{}
+		err := json.Unmarshal([]byte(sample), &any)
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue
+		}
+
+		fmt.Println("Result Type Switch:")
+		handle(any)
+	}
 }
 
-func (f F) M(){
-	fmt.Println(f)
-}
+// type dum interface {
+// 	lol() error
+// }
 
-func do(i interface{}){
-	switch v := i.(type){
-	case int:
-		fmt.Printf("Twice %v is %v\n", v, v*2)
+
+// type tt struct {}
+
+// func (t *tt) lol() error {
+// 	return nil
+// }
+
+// var _ dum = (*tt)(nil)
+
+func handle(v interface{}) {
+	switch t := v.(type) {
+	case map[string]interface{}:
+		fmt.Println("Type: Object (map)")
+		for key, value := range t {
+			fmt.Printf("  Key: %s → ", key)
+			handle(value)
+		}
+
+	case []interface{}:
+		fmt.Println("Type: Array")
+		for i, value := range t {
+			fmt.Printf("  Index %d → ", i)
+			handle(value)
+		}
+
 	case string:
-		fmt.Printf("%q is %v bytes long\n", v, len(v))
+		fmt.Println("Type: String →", t)
+
+	case float64:
+		fmt.Println("Type: Number →", t)
+
+	case bool:
+		fmt.Println("Type: Boolean →", t)
+
+	case nil:
+		fmt.Println("Type: Null")
+
 	default:
-		fmt.Printf("I don't know about type %T!\n", v)
+		fmt.Println("Unknown type:", t)
 	}
-}
-
-type Person struct{
-	Name string
-	Age int
-}
-
-func (p Person) String() string{
-	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
-}
-
-func main(){
-	p1 := Person{"Mayank", 12}
-	p2 := Person{"Bind", 13}
-	fmt.Println(p1, p2)
-}
-
-func describe(i interface{}){
-	fmt.Printf("value : %v :: type : %T\n",i ,i)
 }
