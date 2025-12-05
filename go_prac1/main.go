@@ -1,9 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 func main() {
-	var x int
-	fmt.Scan(&x)
-	fmt.Println(x)
+
+	slice := make([]string, )
+
 }
